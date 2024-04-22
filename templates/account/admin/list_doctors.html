@@ -8,6 +8,18 @@
         <div class="card card-form-bg">
             <h4 class="text-center">Add new doctor</h4>
             {% include '../../frontend/include/alert.html' %}
+
+            {% if form.errors %}
+                <p class="text-white fw-bold">Please correct the following errors:</p>
+                {% for field in form %}
+                    {% if field.errors %}
+                    <div class="alert alert-primary" role="alert">
+                        {{ field.label }}: {{ field.errors|striptags }}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            
             <div class="card-body">
                 <form action="." method="POST" id="add-doctor-form">
                     {% csrf_token %}

@@ -8,6 +8,17 @@
         <div class="card card-form-bg">
             <h4 class="text-center">Add new Specification</h4>
             {% include '../../frontend/include/alert.html' %}
+
+            {% if form.errors %}
+                <p class="text-white fw-bold">Please correct the following errors:</p>
+                {% for field in form %}
+                    {% if field.errors %}
+                    <div class="alert alert-primary" role="alert">
+                        {{ field.label }}: {{ field.errors|striptags }}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
             <div class="card-body">
                 <form action="." method="POST" id="add-spec-form">
                     {% csrf_token %}
@@ -53,7 +64,7 @@
                                         <td>{{list.created}}</td>
                                     
                                         <td>
-                                            <a href="{% url 'account:delete_doctor' list.id %}" class="btn btn-danger btn-custom">Delete</a>
+                                            <a href="{% url 'account:delete_bill_spec' list.id %}" class="btn btn-danger btn-custom">Delete</a>
                                         </td>
                                    
                                 {% endfor %}
@@ -81,7 +92,7 @@
         registerBtnText.textContent = 'Processing';
         registerButton.disabled = true;
 
-        // this.submit();
+        this.submit();
     });
 </script>
 

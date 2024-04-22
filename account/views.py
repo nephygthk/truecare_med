@@ -2,10 +2,11 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from decimal import Decimal
 
-from .models import Customer, Patient, Doctor, BillingSpecification
+from .models import Customer, Patient, Doctor, BillingSpecification, Billing
 from .forms import (PatientForm, RegistrationForm, CustomerUpdateForm,
-                    AddDoctorForm, BillSpecificationForm)
+                    AddDoctorForm, BillSpecificationForm, BillingForm, BillingItemFormSet)
 
 
 def login_user_view(request):
@@ -130,8 +131,52 @@ def bill_specification_list_view(request):
 
     if form.is_valid():
         form.save()
-        messages.success(request, 'Doctor was added successfully')
-        return redirect('account:doctors_list')
+        messages.success(request, 'Bill specification was added successfully')
+        return redirect('account:bill_spec_list')
     
     context = {'spec_list':spec_list, 'spec_count':spec_count, 'form':form}
     return render(request, 'account/admin/list_bill_spec.html', context)
+
+
+@login_required
+def delete_billing_specification_view(request, pk):
+    billing_spec = get_object_or_404(BillingSpecification, id=pk)
+    billing_spec.delete()
+    messages.success(request, 'Bill Specification deleted successfully')
+    return redirect('account:bill_spec_list')
+
+
+@login_required   
+def add_new_billing_view(request):
+    if request.method == "POST":
+        form = BillingForm(request.POST)
+        formset = BillingItemFormSet(request.POST)
+        try:
+            if form.is_valid and formset.is_valid():
+                prices = []
+                parent = form.save()
+                for form in formset:
+                    child = form.save(commit=False)
+                    child.billing = parent
+                    child.save()
+                    prices.append(int(child.bill_value) * (int(child.bill_qty)))
+
+                parent.bill_amount = sum(Decimal(price)  for price in prices)
+                parent.save()
+                return redirect('account:billing_list')
+        except ValueError:
+            messages.success(request, 'A bill for this patient already exist')
+            return redirect('account:add_new_billing')
+    else:
+        form = BillingForm()
+        formset = BillingItemFormSet()
+    context = {'billing_form':form, 'bill_item_form':formset }
+    return render(request, 'account/admin/add_billing.html', context )
+
+
+def billing_list_view(request):
+    billing_list = Billing.objects.all()
+    billing_count = billing_list.count()
+
+    context = {'billing_list':billing_list, 'billing_count':billing_count}
+    return render(request, 'account/admin/list_billing.html', context)

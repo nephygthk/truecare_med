@@ -1,6 +1,7 @@
 from django import forms
+from django.forms import formset_factory, modelformset_factory
 
-from .models import Patient, Customer, Doctor, BillingSpecification
+from .models import Patient, Customer, Doctor, BillingSpecification, Billing, BillingItem
 
 
 class DateInput(forms.DateInput):
@@ -96,3 +97,35 @@ class BillSpecificationForm(forms.ModelForm):
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
+class BillingForm(forms.ModelForm):
+    report_summary = forms.CharField(
+        label='Report Summary', widget=forms.Textarea(attrs={'rows':4, 'cols':15}),)
+
+    class Meta:
+        model = Billing
+        fields = "__all__"
+        exclude = ['created']
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['billing_date'].widget = DateInput()
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
+class BillingItemForm(forms.ModelForm):
+    class Meta:
+        model = BillingItem
+        fields = '__all__'
+        exclude = ['billing']
+
+
+
+BillingItemFormSet = formset_factory(
+    BillingItemForm,
+    extra=0,
+)

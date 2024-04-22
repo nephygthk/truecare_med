@@ -17,4 +17,8 @@ urlpatterns = [
     path('admin/delete-doctor/<pk>/', views.delete_doctor_view, name='delete_doctor'),   
 
     path('admin/bill-specification-list/', views.bill_specification_list_view, name="bill_spec_list"), 
+    path('admin/delete-bill-specification/<pk>/', views.delete_billing_specification_view, name="delete_bill_spec"), 
+
+    path('admin/billing-list/', views.billing_list_view, name="billing_list"),
+    path('admin/add-new-billing/', views.add_new_billing_view, name="add_new_billing"),
 ]
