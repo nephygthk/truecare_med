@@ -1,6 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 def home(request):
+    
+    # check if user is already authenticated
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect('account:admin_dashboard')
+        # else:
+        #     return redirect('account:patient_status')
+
     return render(request, 'frontend/home.html')
 
 

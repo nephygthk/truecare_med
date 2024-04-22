@@ -1,0 +1,98 @@
+from django import forms
+
+from .models import Patient, Customer, Doctor, BillingSpecification
+
+
+class DateInput(forms.DateInput):
+	input_type = 'date'
+	
+
+class PatientForm(forms.ModelForm):
+
+    class Meta:
+        model = Patient
+        fields = ['full_name','patient_id','gender', 'date_of_birth', 'blood_group','address','phone_number', 'admission_date','doctor','picture', 'pass_text']
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['pass_text'].widget = forms.HiddenInput()
+        self.fields['date_of_birth'].widget = DateInput()
+        self.fields['admission_date'].widget = DateInput()
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
+class RegistrationForm(forms.ModelForm):
+    email = forms.EmailField(max_length=100, help_text='Required', error_messages={
+        'required': 'Sorry, you will need an email'})
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label='Repeat password', widget=forms.PasswordInput)
+    
+    class Meta:
+        model = Customer
+        fields = ('email',)
+
+    def clean_password2(self):
+        cd = self.cleaned_data
+        if cd['password'] != cd['password2']:
+            raise forms.ValidationError('Passwords do not match.')
+        return cd['password2']
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if Customer.objects.filter(email=email).exists():
+            raise forms.ValidationError(
+                'A user with this email already exist, please try another email')
+        return email
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs.update(
+            {'class': 'form-control'})
+        self.fields['password'].widget.attrs.update(
+            {'class': 'form-control'})
+        self.fields['password2'].widget.attrs.update(
+            {'class': 'form-control'})
+        
+
+class CustomerUpdateForm(forms.ModelForm):
+    email = forms.EmailField(max_length=100, help_text='Required', error_messages={
+        'required': 'Sorry, you will need an email'})
+    
+    class Meta:
+        model = Customer
+        fields = ['email']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs.update(
+            {'class': 'form-control mb-3'})
+        
+
+class AddDoctorForm(forms.ModelForm):
+    class Meta:
+        model = Doctor
+        fields = '__all__'
+        exclude = ['created']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
+class BillSpecificationForm(forms.ModelForm):
+    class Meta:
+        model = BillingSpecification
+        fields = '__all__'
+        exclude = ['created']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})

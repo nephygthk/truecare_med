@@ -3,10 +3,13 @@
     <a href="{% url 'account:admin_dashboard' %}">Dashboard</a>
     </li>
     <li>
-    <a href="#">Doctors</a>
+    <a href="{% url 'account:add_patient' %}">Add Patient</a>
     </li>
     <li>
-        <a href="#">Billing Specifications</a>
+    <a href="{% url 'account:doctors_list' %}">Doctors</a>
+    </li>
+    <li>
+        <a href="{% url 'account:bill_spec_list' %}">Billing Specifications</a>
     </li>
     <li>
     <a href="#">Billings</a>
