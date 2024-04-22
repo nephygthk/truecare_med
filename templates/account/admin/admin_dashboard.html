@@ -1,0 +1,52 @@
+{% extends '../base.html' %}
+
+
+{% block content %}
+
+<div class="row justify-content-center align-items-center">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="text-center">Patient List</h4>
+                <div class="table-responsive">
+                    <table class="table table-custom">
+                        <thead>
+                          <tr>
+                            <th>First Name</th>
+                            <th>First Name</th>
+                            <th>Email</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>John</td>
+                                <td>Doe doe doe</td>
+                                <td>john@example.com</td>
+                                <td>John john</td>
+                                <td>Doe doe doe</td>
+                                <td>john@example.com</td>
+                                <td>
+                                    <a class="btn btn-info btn-custom">Edit</a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-danger btn-custom">Delete</a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-warning btn-custom">other</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

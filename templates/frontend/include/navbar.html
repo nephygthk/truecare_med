@@ -1,4 +1,54 @@
+<!-- style -->
+<style>
+    .modal-content{
+        max-width: 400px !important;
+        background: #064cb4 !important;
+        color: #fff;
+    }
 
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: 5px;
+        transition: border-color 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #3306af;
+        box-shadow: none;
+        /* box-shadow: 0 0 0 0.2rem rgba(0, 17, 255, 0.25); */
+        }
+
+    textarea.form-control {
+        resize: vertical;
+    }
+
+    button.btn-primary {
+        position: relative;
+        width: 100%;
+        margin-top: 20px;
+        background-color: #12055c;
+        border: none;
+        font-weight: bold;
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    button.btn-primary:hover {
+        background-color: #080614;
+    }
+    .custom-text-color{
+        color: #080614 !important;
+    }
+
+    @media (min-width: 1000px){
+        .small-screen-sign-in{
+            display: none;
+        }
+    }
+
+</style>
 
 <!-- Topbar Start -->
 <div class="container-fluid bg-light p-0 wow fadeIn" data-wow-delay="0.1s">
@@ -38,8 +88,86 @@
             <a href="{% url 'frontend:about' %}" class="nav-item nav-link">About</a>
             <a href="{% url 'frontend:service' %}" class="nav-item nav-link">Service</a>
             <a href="{% url 'frontend:contact' %}" class="nav-item nav-link">Contact</a>
+            <a href="" data-bs-toggle="modal" data-bs-target="#loginModal" class="nav-item nav-link small-screen-sign-in">Sign In</a>
         </div>
-        <a href="" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Sign In<i class="fa fa-arrow-right ms-3"></i></a>
+        <a href="" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block" data-bs-toggle="modal" data-bs-target="#loginModal">Sign In<i class="fa fa-arrow-right ms-3"></i></a>
     </div>
 </nav>
 <!-- Navbar End -->
+
+
+<!-- login modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" style="width: 400px;">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-white" id="loginModalLabel">Sign In</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="border-color: #fff;"></button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'account:login' %}" method="POST" id="login-form">
+                {% csrf_token %}
+
+                <div class="form-group mb-3">
+                    <label for="login-email" class="form-label">Email</label>
+                    <input type="email" class="form-control custom-text-color" id="login-email" name="email">
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control custom-text-color" id="password" name="password">
+                </div>
+
+                <div class="form-group mb-3">
+                    <input class="form-check-input" type="checkbox" value="" id="login-password-show">
+                    <label class="form-check-label" for="login-password-show">
+                        Show Password
+                    </label>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary " id="login-btn">
+                        <span id="btn-text">Sign In</span>
+                        <div class="spinner-border text-light spinner-border-sm ms-4 d-none" role="status" id="spinner-login">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+        
+      </div>
+    </div>
+</div>
+
+<script>
+    const loginPassword = document.getElementById('password');
+    const showLoginPassword = document.getElementById('login-password-show');
+
+    showLoginPassword.addEventListener('change', function() {
+        if (showLoginPassword.checked) {
+            loginPassword.type = 'text';
+        } else {
+            loginPassword.type = 'password';
+        }
+    });
+</script>
+
+<script>
+    const loginForm = document.querySelector('#login-form');
+    const spinner = document.querySelector('#spinner-login');
+    const btnText = document.querySelector('#btn-text');
+    const submitButton = document.querySelector('#login-btn');
+
+    loginForm.addEventListener('submit', function(e){
+        e.preventDefault();
+
+        spinner.classList.remove('d-none');
+        submitButton.style.background = '#493b99';
+        btnText.textContent = 'Processing';
+        submitButton.disabled = true;
+
+        this.submit();
+    });
+</script>

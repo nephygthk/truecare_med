@@ -8,9 +8,10 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+# importing cloudinary
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -31,7 +32,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'cloudinary',
     'frontend',
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -108,15 +111,25 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Custom user model
+AUTH_USER_MODEL = "account.Customer"
+# LOGIN_REDIRECT_URL = "/account/admin_dashboard"
+LOGIN_URL = "/"
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+#cloudinary api config
+cloudinary.config( 
+  	cloud_name = os.environ.get('CLOUD_NAME'),
+  	api_key = os.environ.get('API_KEY'),
+  	api_secret = os.environ.get('API_SECRET')
+)
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

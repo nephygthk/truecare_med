@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Sidebar</title>
+
+  <!-- boostrap cdn -->
+  <link rel="stylesheet" href="{% static 'account/css/bootstrap.min.css' %}">
+
+  <!-- fontawesome cdn -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <!-- custom style -->
+  <link rel="stylesheet" href="{% static 'account/css/styles.css' %}">
+
+</head>
+<body>
+  
+    <div class="wrapper">
+        <nav id="sidebar">
+            <div class="sidebar-header" >
+                <h4>TRUE<span class="text-info">CARE</span></h4>
+                <button id="closeSidebar">&times;</button>
+            </div>
+            <hr class="bg-light">
+            {% include './include/sidebar.html' %}
+        </nav>
+        <div id="content">
+
+            <!--side bar toggle menu -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                <button type="button" id="sidebarCollapse">
+                    <i class="fas fa-bars"></i>
+                </button>
+                </div>
+            </nav>
+            
+            <div class="container-fluid bg-light pt-5">
+                {% block content %}{% endblock %}
+            </div>
+            
+        </div>
+        
+    </div>
+  
+  <script src="{% static 'account/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'account/js/scripts.js' %}"></script>
+</body>
+</html>
