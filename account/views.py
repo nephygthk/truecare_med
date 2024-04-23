@@ -4,10 +4,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from decimal import Decimal
 
-from .models import (Customer, Patient, Doctor, 
-                    BillingSpecification, Billing, BillingItem, Payment)
+from .models import (Customer, Patient, Doctor, BillingSpecification, 
+                    Billing, BillingItem, Payment, Address)
 from .forms import (PatientForm, RegistrationForm, CustomerUpdateForm,
-                    AddDoctorForm, BillSpecificationForm, BillingForm, BillingItemFormSet, EditBillingItemFormSet)
+                    AddDoctorForm, BillSpecificationForm, BillingForm, BillingItemFormSet, EditBillingItemFormSet, AddressForm)
 
 
 def login_user_view(request):
@@ -233,4 +233,45 @@ def payment_list_view(request):
 
     context = {'payment_list':payment_list, 'payment_count':payment_count}
     return render(request, 'account/admin/list_payment.html', context)
+
+
+@login_required
+def delete_payment_view(request, pk):
+    payment = get_object_or_404(Payment, id=pk)
+    payment.delete()
+    messages.success(request, 'payment deleted successfully')
+    return redirect('account:payment_list')
+
+
+@login_required
+def add_and_view_addresses(request):
+    list_address = Address.objects.all()
+    address_count = list_address.count()
+    address_form = AddressForm(request.POST or None)
+
+    if address_form.is_valid():
+        address_form.save()
+        messages.info(request, 'The new address was added successfully')
+        return redirect('account:address_list')
+
+    context = {'form':address_form, 'list_address':list_address,'address_count':address_count }
+    return render(request, 'account/admin/list_address.html', context)
+
+
+@login_required
+def make_default_address_view(request, pk):
+    Address.objects.filter(is_default=True).update(is_default=False)
+    Address.objects.filter(pk=pk).update(is_default=True)
+    return redirect('account:address_list')
+
+
+@login_required
+def delete_address_view(request, pk):
+    address = Address.objects.get(id=pk)
+    if address.is_default == True:
+        messages.error(request, "This address can't be delected because it is currently selected as the default address. remove it as default address before deleting")
+    else:
+        address.delete()
+        messages.success(request, 'Address deleted successfully')
+    return redirect('account:address_list')
 

@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import formset_factory, modelformset_factory
 
-from .models import Patient, Customer, Doctor, BillingSpecification, Billing, BillingItem
+from .models import Patient, Customer, Doctor, BillingSpecification, Billing, BillingItem, Address
 
 
 class DateInput(forms.DateInput):
@@ -122,6 +122,18 @@ class BillingItemForm(forms.ModelForm):
         model = BillingItem
         fields = '__all__'
         exclude = ['billing']
+
+
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ['address_name','city', 'country']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
 
 
 

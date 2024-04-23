@@ -26,4 +26,9 @@ urlpatterns = [
     path('admin/delete-billing/<pk>/', views.delete_billing_view, name="delete_billing"),
 
     path('admin/payment-list/', views.payment_list_view, name="payment_list"),
+    path('admin/delete-payment/<pk>/', views.delete_payment_view, name="delete_payment"),
+
+    path('admin/address-list/', views.add_and_view_addresses, name="address_list"),
+    path('admin/make-default-address/<pk>/', views.make_default_address_view, name="make_default_address"),
+    path('admin/delete-address/<pk>/', views.delete_address_view, name="delete_address"),
 ]
