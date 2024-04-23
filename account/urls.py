@@ -31,4 +31,5 @@ urlpatterns = [
     path('admin/address-list/', views.add_and_view_addresses, name="address_list"),
     path('admin/make-default-address/<pk>/', views.make_default_address_view, name="make_default_address"),
     path('admin/delete-address/<pk>/', views.delete_address_view, name="delete_address"),
+    path('admin/show-receipt/<pk>/', views.show_receipt_view, name="show_receipt"),
 ]

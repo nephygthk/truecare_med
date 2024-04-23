@@ -275,3 +275,13 @@ def delete_address_view(request, pk):
         messages.success(request, 'Address deleted successfully')
     return redirect('account:address_list')
 
+
+@login_required
+def show_receipt_view(request, pk):
+    billing = get_object_or_404(Billing, pk=pk)
+    bill_items = BillingItem.objects.filter(billing=billing)
+    address = Address.objects.get(is_default=True)
+
+    context = {'billing':billing, 'bill_items':bill_items, 'address':address}
+    return render(request, 'account/receipt/show_receipt.html', context)
+
