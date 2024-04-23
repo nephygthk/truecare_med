@@ -129,3 +129,9 @@ BillingItemFormSet = formset_factory(
     BillingItemForm,
     extra=0,
 )
+
+EditBillingItemFormSet = modelformset_factory(
+    BillingItem,
+    BillingItemForm,
+    extra=0,
+)

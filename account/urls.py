@@ -21,4 +21,9 @@ urlpatterns = [
 
     path('admin/billing-list/', views.billing_list_view, name="billing_list"),
     path('admin/add-new-billing/', views.add_new_billing_view, name="add_new_billing"),
+    path('admin/edit-billing/<pk>/', views.edit_billing_view, name="edit_billing"),
+    path('admin/detail-billing/<pk>/', views.billing_detail_view, name="detail_billing"),
+    path('admin/delete-billing/<pk>/', views.delete_billing_view, name="delete_billing"),
+
+    path('admin/payment-list/', views.payment_list_view, name="payment_list"),
 ]

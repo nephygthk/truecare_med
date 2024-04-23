@@ -4,9 +4,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from decimal import Decimal
 
-from .models import Customer, Patient, Doctor, BillingSpecification, Billing
+from .models import (Customer, Patient, Doctor, 
+                    BillingSpecification, Billing, BillingItem, Payment)
 from .forms import (PatientForm, RegistrationForm, CustomerUpdateForm,
-                    AddDoctorForm, BillSpecificationForm, BillingForm, BillingItemFormSet)
+                    AddDoctorForm, BillSpecificationForm, BillingForm, BillingItemFormSet, EditBillingItemFormSet)
 
 
 def login_user_view(request):
@@ -146,6 +147,15 @@ def delete_billing_specification_view(request, pk):
     return redirect('account:bill_spec_list')
 
 
+@login_required
+def billing_list_view(request):
+    billing_list = Billing.objects.all()
+    billing_count = billing_list.count()
+
+    context = {'billing_list':billing_list, 'billing_count':billing_count}
+    return render(request, 'account/admin/list_billing.html', context)
+
+
 @login_required   
 def add_new_billing_view(request):
     if request.method == "POST":
@@ -174,9 +184,53 @@ def add_new_billing_view(request):
     return render(request, 'account/admin/add_billing.html', context )
 
 
-def billing_list_view(request):
-    billing_list = Billing.objects.all()
-    billing_count = billing_list.count()
+@login_required
+def edit_billing_view(request, pk):
+    billing = get_object_or_404(Billing, pk=pk)
+    billing_item = BillingItem.objects.filter(billing=billing)
+    form = BillingForm(request.POST or None, instance=billing)
+    formset = EditBillingItemFormSet(request.POST or None, queryset=billing_item)
 
-    context = {'billing_list':billing_list, 'billing_count':billing_count}
-    return render(request, 'account/admin/list_billing.html', context)
+    if all([form.is_valid(), formset.is_valid()]):
+        prices = []
+        parent = form.save()
+        for form in formset:
+            child = form.save(commit=False)
+            child.billing = parent
+            child.save()
+            prices.append(int(child.bill_value) * (int(child.bill_qty)))
+        parent.bill_amount = sum(Decimal(price)  for price in prices)
+        parent.save()
+
+        messages.success(request, 'The bill was updated successfully')
+        return redirect('account:billing_list')
+
+    context = {'billing_form':form, 'bill_item_form':formset}
+    return render(request, "account/admin/edit_billing.html", context)
+
+
+@login_required
+def billing_detail_view(request, pk):
+    billing_detail =  get_object_or_404(Billing, pk=pk)
+    bill_items = BillingItem.objects.filter(billing=billing_detail)
+
+    context = {'bill':billing_detail, 'bill_items':bill_items}
+    return render(request, "account/admin/list_billing_detail.html", context)
+
+
+@login_required
+def delete_billing_view(request, pk):
+    billing = get_object_or_404(Billing, id=pk)
+    billing.delete()
+    messages.success(request, 'Billing deleted successfully')
+    return redirect('account:billing_list')
+
+
+@login_required
+def payment_list_view(request):
+    payment_list = Payment.objects.all()
+    payment_count = payment_list.count()
+
+    context = {'payment_list':payment_list, 'payment_count':payment_count}
+    return render(request, 'account/admin/list_payment.html', context)
+
