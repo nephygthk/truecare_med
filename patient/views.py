@@ -1,19 +1,35 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
 
 from .forms import PaymentForm
-from account.models import Payment, Billing
+from account.models import Payment, Billing, BillingItem
 
 
+@login_required
 def patient_dashboard_view(request):
     return render(request, 'account/patient/patient_dashboard.html')
 
 
+@login_required
+def patient_billing_view(request):
+    try:
+        bills = Billing.objects.filter(patient=request.user.patient)
+        bill_items = BillingItem.objects.filter(billing=request.user.patient.billing)
+
+        context = {'bills':bills, 'bill_items': bill_items}
+        return render(request, 'account/patient/patient_billing.html', context)
+    except:
+        return render(request, 'account/patient/patient_billing.html')
+
+
+@login_required
 def appointment_view(request):
     return render(request, 'account/patient/appointment.html')
 
 
+@login_required
 def payment_view(request):
     payment_list = Payment.objects.filter(patient=request.user.patient)
     payment_count = payment_list.count()
@@ -36,6 +52,7 @@ def payment_view(request):
     return render(request, 'account/patient/payment.html', context)
 
 
+@login_required
 def contact_view(request):
     if request.method == 'POST':
         name = request.POST.get('name')
