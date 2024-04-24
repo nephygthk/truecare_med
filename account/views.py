@@ -16,8 +16,8 @@ def login_user_view(request):
     if request.user.is_authenticated:
         if request.user.is_staff:
             return redirect('account:admin_dashboard')
-        # else:
-        #     return redirect('account:patient_status')
+        else:
+            return redirect('patient:patient_dashboard')
         
     if request.method == 'POST':
         email = request.POST['email']
@@ -29,9 +29,9 @@ def login_user_view(request):
             if user.is_staff:
                 login(request, user)
                 return redirect('account:admin_dashboard')
-            # else:
-            #     login(request, user)
-            #     return redirect('account:patient_dashboard')
+            else:
+                login(request, user)
+                return redirect('patient:patient_dashboard')
             
         else:
             messages.info(request, 'Username or password is incorrect')

@@ -1,4 +1,5 @@
 <ul class="list-unstyled components">
+    {% if request.user.is_staff %}
     <li>
     <a href="{% url 'account:admin_dashboard' %}">Dashboard</a>
     </li>
@@ -20,6 +21,24 @@
     <li>
         <a href="{% url 'account:address_list' %}">Addresses</a>
     </li>
+    
+    {% else %}
+    <li>
+        <a href="{% url 'patient:patient_dashboard' %}">Dashboard</a>
+    </li>
+    <li>
+        <a href="{% url 'patient:patient_dashboard' %}">Billing</a>
+    </li>
+    <li>
+        <a href="{% url 'patient:patient_dashboard' %}">Make Payment</a>
+    </li>
+    <li>
+        <a href="{% url 'patient:patient_dashboard' %}">Appointments</a>
+    </li>
+    <li>
+        <a href="{% url 'patient:patient_dashboard' %}">Contact Us</a>
+    </li>
+    {% endif %}
     <hr>
     <a href="{% url 'account:logout' %}" class="btn btn-danger fw-bold w-100">Sign out <i class="fa-solid fa-right-from-bracket ms-4"></i></a>
 </ul>

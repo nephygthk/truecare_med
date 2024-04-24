@@ -1,0 +1,138 @@
+{% extends '../base.html' %}
+
+
+{% block content %}
+
+<style>
+    .box{
+        position: relative;
+        width: 100%;
+        height: 480px;
+        background-color: black;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        overflow: hidden !important;
+        margin-bottom: 14px;
+    }
+    .box img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+        z-index: 10;
+    }
+    .box::before{
+        content: '';
+        position: absolute;
+        width: 170px;
+        height: 200%;
+        background: linear-gradient(#00ccff, #d500f9);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgb(8, 8, 8);
+        animation: animate 4s linear infinite;
+    }
+    .box::after{
+        content: '';
+        position: absolute;
+        inset: 4px;
+        background: rgba(0, 0, 0, 1);
+        border-radius: 10px;
+    }
+
+    @keyframes animate{
+        0%{
+            transform: rotate(0deg);
+        }
+        100%{
+            transform: rotate(360deg);
+        }
+    }
+    
+    .patient-detail-card{
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url(/static/img/hus-bed.jpg);
+        background-position: center;
+        background-repeat: no repeat;
+        background-size: cover;
+    }
+    .table_custom { 
+        --bs-table-bg: transparent !important;
+        font-weight: bold;
+    }
+    tr {
+        width: 100%;
+        display: inline-table;
+        height:51px;  
+    }
+    td{
+        color: #fff !important;
+    }
+
+    
+</style>
+
+<div class="row">
+    <!-- <div class="col-md-6">
+        <div class="card shadow patient-img-card mb-4 mb-md-0">
+            <div class="card-body c-body">
+                <img class="p-image" src="{{request.user.patient.picture.url}}" alt="patient-image" class="img-fluid">
+            </div>
+            <div class="info d-flex justify-content-between px-3 text-white fw-bold">
+                <p>NAME: {{request.user.patient.full_name}}</p>
+                <p>ADMITTED ON: {{request.user.patient.admission_date}}</p>
+            </div>
+        </div>
+    </div> -->
+    <div class="col-md-6">
+        <div class="box">
+            <img src="{{request.user.patient.picture.url}}" alt="">
+
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow patient-detail-card">
+            <div class="card-body">
+                <table class="table table-bordered border-primary table_custom">
+                    <tbody>
+                      <tr>
+                        <td class="col-5">Name:</td>
+                        <td>{{request.user.patient.full_name}}</td>
+                      </tr>
+                      <tr>
+                        <td class="col-5">Patient ID:</td>
+                        <td>{{request.user.patient.patient_id}}</td>
+                      </tr>
+                      <tr>
+                        <td class="col-5">Gender:</td>
+                        <td>{{request.user.patient.gender}}</td>
+                      </tr>
+                      <tr>
+                        <td class="col-5">Date of Birth:</td>
+                        <td>{{request.user.patient.date_of_birth}}</td>
+                      </tr>
+                      <tr>
+                        <td class="col-5">Blood Group:</td>
+                        <td>{{request.user.patient.blood_group}}</td>
+                      </tr>
+                      <tr>
+                        <td class="col-5">Home Address:</td>
+                        <td>{{request.user.patient.address}}</td>
+                      </tr>
+                      <tr>
+                        <td class="col-5">Email Address:</td>
+                        <td>{{request.user.email}}</td>
+                      </tr>
+                      <tr>
+                        <td class="col-5">Admitted On::</td>
+                        <td>{{request.user.patient.admission_date}}</td>
+                      </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

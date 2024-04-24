@@ -8,8 +8,8 @@ def home(request):
     if request.user.is_authenticated:
         if request.user.is_staff:
             return redirect('account:admin_dashboard')
-        # else:
-        #     return redirect('account:patient_status')
+        else:
+            return redirect('patient:patient_dashboard')
 
     address = Address.objects.get(is_default=True)
     context ={'address':address}
@@ -17,18 +17,42 @@ def home(request):
 
 
 def about(request):
+    # check if user is already authenticated
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect('account:admin_dashboard')
+        else:
+            return redirect('patient:patient_dashboard')
+        
+
     address = Address.objects.get(is_default=True)
     context ={'address':address}
     return render(request, 'frontend/about.html', context)
 
 
 def service(request):
+    # check if user is already authenticated
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect('account:admin_dashboard')
+        else:
+            return redirect('patient:patient_dashboard')
+        
+
     address = Address.objects.get(is_default=True)
     context ={'address':address}
     return render(request, 'frontend/service.html', context)
 
 
 def contact(request):
+    # check if user is already authenticated
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect('account:admin_dashboard')
+        else:
+            return redirect('patient:patient_dashboard')
+        
+        
     address = Address.objects.get(is_default=True)
     
     context ={'address':address}
