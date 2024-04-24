@@ -136,7 +136,6 @@ class AddressForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
 
-
 BillingItemFormSet = formset_factory(
     BillingItemForm,
     extra=0,

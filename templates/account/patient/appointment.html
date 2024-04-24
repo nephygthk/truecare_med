@@ -1,0 +1,37 @@
+{% extends '../base.html' %}
+
+
+{% block content %}
+
+<div class="row justify-content-center align-items-center">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="text-center">Appointment List</h4>
+                {% include '../../frontend/include/alert.html' %}
+                <div class="table-responsive">
+                    <table class="table table-custom">
+                        <thead>
+                          <tr>
+                            <<th scope="col">Patient Name</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Doctor</th>
+                            <th scope="col">Purpose</th>
+                            
+                          </tr>
+                        </thead>
+                        
+                        <tbody>
+                            <tr>
+                                <td>No appointment list to display. </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
