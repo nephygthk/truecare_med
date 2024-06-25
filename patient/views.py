@@ -62,8 +62,8 @@ def contact_view(request):
             send_mail(
                 'Message From '+name+' <'+email+'>',
                 message,
-                'contact@truecaremedservice.com',
-                ['contact@truecaremedservice.com'],
+                'MartinDale Medical<emergency@martindale-med.com>',
+                ['emergency@martindale-med.com'],
                 fail_silently=False,
             )
             messages.success(request, 'Email sent successfully, we will get back to you as soon as possible')
