@@ -1,3 +1,5 @@
+{% load static %}
+
 <!-- style -->
 <style>
     .modal-content{
@@ -42,9 +44,18 @@
         color: #080614 !important;
     }
 
+    .mlogo{
+        width: 300px;
+    }
+
     @media (min-width: 1000px){
         .small-screen-sign-in{
             display: none;
+        }
+    }
+    @media(max-width: 1000px){
+        .mlogo{
+            width: 200px;
         }
     }
 
@@ -77,7 +88,8 @@
 <!-- Navbar Start -->
 <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
     <a href="/" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-        <h1 class="m-0 text-primary"><i class="far fa-hospital me-3"></i>TRUECARE</h1>
+        <!-- <h1 class="m-0 text-primary"><i class="far fa-hospital me-3"></i>TRUECARE</h1> -->
+        <img src="{% static 'img/mlogo.png' %}" alt="" class="img-fluid mlogo">
     </a>
     <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>

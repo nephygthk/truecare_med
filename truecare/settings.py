@@ -17,9 +17,9 @@ import cloudinary.api
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', ".vercel.app", ".now.sh"]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', ".vercel.app", ".now.sh", ' martindale-med.com', 'www.martindale-med.com']
 
 
 # Application definition
